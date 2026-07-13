@@ -6,9 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
   body { margin: 0; background: #1a1a2e; }
-  #page-content { display: flex; align-items: flex-start; gap: 0; padding: 8px; }
-  #page-content > .mxgraph { flex: 1 1 0; min-width: 0; }
-  #event-planner { flex: 0 0 340px; margin: 0 !important; max-width: 340px !important; position: sticky; top: 8px; max-height: calc(100vh - 16px); overflow-y: auto; }
+  #page-content { display: flex; flex-direction: column; padding: 16px; gap: 16px; }
+  #event-planner { order: -1; margin: 0 auto !important; max-width: 860px !important; width: 100%; }
   /* Gallery Modal */
   #gallery-modal {
     display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -85,12 +84,8 @@
   .detail-link:hover { color: #b3e0ff; }
 
   /* Mobile responsive */
-  @media (max-width: 900px) {
-    #page-content { flex-direction: column; padding: 8px; gap: 8px; }
-    #page-content > .mxgraph { flex: none; width: 100%; max-width: 100%; }
-    #event-planner { flex: none !important; max-width: 100% !important; position: static !important; max-height: none !important; overflow-y: visible !important; }
-  }
   @media (max-width: 700px) {
+    #page-content { padding: 8px; gap: 8px; }
     #gallery-content { width: 95%; margin: 20px auto; padding: 10px; }
     #gallery-title { font-size: 20px; margin-bottom: 16px; }
     #gallery-images { grid-template-columns: 1fr; gap: 12px; }
