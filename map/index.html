@@ -78,6 +78,23 @@
   .gallery-link:hover { color: #ffe066; }
   .detail-link { color: #7ecbff; text-decoration: underline; cursor: pointer; }
   .detail-link:hover { color: #b3e0ff; }
+
+  /* Mobile responsive */
+  @media (max-width: 600px) {
+    #gallery-content { width: 95%; margin: 20px auto; padding: 10px; }
+    #gallery-title { font-size: 20px; margin-bottom: 16px; }
+    #gallery-images { grid-template-columns: 1fr; gap: 12px; }
+    #gallery-close { top: 10px; right: 12px; width: 40px; height: 40px; font-size: 28px; }
+    #fullscreen-viewer img { max-width: 100%; max-height: 90%; border-radius: 0; }
+    .event-header { padding: 12px 14px; font-size: 15px; }
+    .event-body { padding: 8px 12px 14px; }
+    .event-body ul { padding-left: 14px; }
+    .event-body li { font-size: 14px; margin-bottom: 8px; }
+    .event-body h4 { font-size: 14px; }
+    #detail-content { margin: 50px 10px; padding: 16px; }
+    #detail-content h2 { font-size: 18px; }
+    #detail-content li { font-size: 14px; margin-bottom: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -86,7 +103,7 @@
 <script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
 
 <!-- Event Planner Section -->
-<div id="event-planner" style="max-width:860px; margin:30px auto; padding:20px 28px; background:#12122a; border:1px solid #2a2a44; border-radius:10px; font-family:'Georgia',serif; color:#e0e0e0; line-height:1.7;">
+<div id="event-planner" style="max-width:860px; margin:30px auto; padding:16px 16px; background:#12122a; border:1px solid #2a2a44; border-radius:10px; font-family:'Georgia',serif; color:#e0e0e0; line-height:1.7; box-sizing:border-box;">
   <h2 style="color:#f5c518; margin-top:0; font-size:22px;">&#128141; Wedding Day Planner</h2>
   <p style="color:#aaa; margin-bottom:18px; font-size:14px;">Click any section to expand details. Click items with &#128247; to see decor images.</p>
 
