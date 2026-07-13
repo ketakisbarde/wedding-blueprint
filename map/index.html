@@ -238,7 +238,7 @@
     'mehendi-props': {
       title: '\ud83c\udf3f Mehendi Table Props & Decor',
       folder: '../mehendi/',
-      images: ['mehendi-decor-props-on-the-table.jpeg', 'mehendi-decor-table-bridesmaid-gift-boxes-on-the-table.jpeg', 'mehendi-decor-prop-idea-for-henna.png']
+      images: ['mehendi-decor-props-on-the-table.jpeg', 'mehendi-decor-table-bridesmaid-gift-boxes-on-the-table.jpeg', 'mehendi-decor-prop-idea-for-henna.png', '../wedding-decor/decor-poster-theme-mehendi-and-welcome-sign.png']
     },
     'mehendi-arch': {
       title: '\ud83c\udf3f Mehendi Main Arch & Ottoman',
@@ -254,6 +254,21 @@
       title: '\ud83c\udfad Activity Props',
       folder: '../wedding-decor/',
       images: ['wedding-decor-acitivity-prop-advices-&-wishes.jpeg', 'wedding-decor-activity-prop-leave-a-message.jpeg', 'wedding-decor-thread-art-acitivity.png', 'wedding-decor-caricature-acitivity-signin-near-welcome-walkway.png']
+    },
+    'activity-advices-wishes': {
+      title: '\ud83d\udcdd Advices & Wishes',
+      folder: '../wedding-decor/',
+      images: ['wedding-decor-acitivity-prop-advices-&-wishes.jpeg', 'wedding-decor-activity-prop-leave-a-message.jpeg']
+    },
+    'activity-thread-art': {
+      title: '\ud83e\uddf5 Thread Art on Canvas',
+      folder: '../wedding-decor/',
+      images: ['wedding-decor-thread-art-acitivity.png']
+    },
+    'activity-caricature': {
+      title: '\ud83c\udfa8 Caricature Sign-in Board',
+      folder: '../wedding-decor/',
+      images: ['wedding-decor-caricature-acitivity-signin-near-welcome-walkway.png']
     }
   };
 
@@ -285,7 +300,7 @@
       emptyMsg.style.display = 'none';
       config.images.forEach(function(img) {
         var imgEl = document.createElement('img');
-        imgEl.src = config.folder + img;
+        imgEl.src = img.indexOf('../') === 0 ? img : config.folder + img;
         imgEl.alt = img;
         imgEl.onclick = function() {
           document.getElementById('fullscreen-img').src = imgEl.src;
@@ -298,10 +313,22 @@
     modal.style.display = 'flex';
   }
 
+  var _galleryReturnOverlay = null;
+
+  function openGalleryFromOverlay(galleryKey, overlayKey) {
+    _galleryReturnOverlay = overlayKey;
+    document.getElementById('detail-overlay').style.display = 'none';
+    openGallery(galleryKey);
+  }
+
   function closeGallery() {
     document.getElementById('fullscreen-viewer').style.display = 'none';
     document.getElementById('gallery-modal').style.display = 'none';
     document.body.classList.remove('gallery-open');
+    if (_galleryReturnOverlay) {
+      openDetailOverlay(_galleryReturnOverlay);
+      _galleryReturnOverlay = null;
+    }
   }
 
   function closeFullscreen() {
@@ -403,13 +430,12 @@
       title: '\ud83c\udfad Main Ceremony Activities & Games',
       content: '<ul>' +
         '<li><strong>\ud83d\udcf8 Photo Booth</strong> &mdash; throughout event</li>' +
-        '<li><a href="javascript:void(0)" onclick="closeDetailOverlay();openGallery(\'activity-props\')" style="color:#f5c518; text-decoration:underline; cursor:pointer;"><strong>\ud83d\udcdd Advices &amp; wishes cards on table</strong></a> &mdash; throughout event</li>' +
+        '<li><a href="javascript:void(0)" onclick="openGalleryFromOverlay(\'activity-advices-wishes\', \'ceremony-games\')" style="color:#f5c518; text-decoration:underline; cursor:pointer;"><strong>\ud83d\udcdd Advices &amp; wishes + Leave a message cards on table</strong></a> &mdash; throughout event</li>' +
         '<li><strong>\ud83d\udc5f 20 Questions + Shoe Game</strong> &mdash; "Who said I love you first?" etc. Guests answer, reveal in shoe game. <em>AFTER ceremony vows, before lunch</em></li>' +
         '<li><strong>\ud83d\udd0d I Spy QR code game</strong> &mdash; card on table, else online (throughout event)</li>' +
-        '<li><strong>\ud83e\uddf5 Thread art on canvas</strong> &mdash; nails required. We have a stand but need to order board + nails + threads (throughout event) <a href="javascript:void(0)" onclick="closeDetailOverlay();openGallery(\'activity-props\')" style="color:#f5c518;">[see ref]</a></li>' +
+        '<li><strong>\ud83e\uddf5 Thread art on canvas</strong> &mdash; nails required. We have a stand but need to order board + nails + threads (throughout event) <a href="javascript:void(0)" onclick="openGalleryFromOverlay(\'activity-thread-art\', \'ceremony-games\')" style="color:#f5c518;">[see ref]</a></li>' +
         '<li><strong>\ud83d\udd20 Word search</strong> &mdash; spot your name or wedding themed strands &mdash; online scannable (throughout event)</li>' +
-        '<li><strong>\ud83c\udfa8 Caricature poster</strong> &mdash; sign-up near walkway welcome sign <a href="javascript:void(0)" onclick="closeDetailOverlay();openGallery(\'activity-props\')" style="color:#f5c518;">[see ref]</a></li>' +
-        '<li><strong>\u2709\ufe0f Leave a message</strong> &mdash; cards / props on table (throughout event)</li>' +
+        '<li><strong>\ud83c\udfa8 Caricature poster</strong> &mdash; sign-up near walkway welcome sign <a href="javascript:void(0)" onclick="openGalleryFromOverlay(\'activity-caricature\', \'ceremony-games\')" style="color:#f5c518;">[see ref]</a></li>' +
       '</ul>'
     }
   };
