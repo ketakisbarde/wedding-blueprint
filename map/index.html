@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Wedding-Map-Blueprint</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+  body { margin: 0; background: #1a1a2e; }
+  /* Gallery Modal */
+  #gallery-modal {
+    display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #000000; z-index: 99999; overflow-y: auto;
+    justify-content: center; align-items: flex-start;
+  }
+  #gallery-modal.active { display: flex; }
+  #gallery-content {
+    max-width: 900px; width: 90%; margin: 40px auto; padding: 20px;
+    text-align: center;
+  }
+  #gallery-title {
+    color: #f5c518; font-family: 'Georgia', serif; font-size: 28px;
+    margin-bottom: 24px; letter-spacing: 1px;
+  }
+  #gallery-images {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  #gallery-images img {
+    width: 100%; border-radius: 8px; cursor: pointer;
+    transition: transform 0.2s; box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  }
+  #gallery-images img:hover { transform: scale(1.04); }
+  #gallery-close {
+    position: fixed; top: 16px; right: 24px; color: #fff; font-size: 36px;
+    cursor: pointer; z-index: 100000; background: rgba(30,30,30,0.8);
+    border: none; border-radius: 50%; width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #gallery-close:hover { background: rgba(245,197,24,0.3); }
+  #gallery-empty {
+    color: #aaa; font-size: 18px; padding: 60px 20px;
+    font-family: 'Georgia', serif;
+  }
+  /* Fullscreen image viewer */
+  #fullscreen-viewer {
+    display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #000000; z-index: 100001;
+    justify-content: center; align-items: center; cursor: zoom-out;
+  }
+  #fullscreen-viewer.active { display: flex; }
+  #fullscreen-viewer img {
+    max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 4px;
+  }
+  /* When gallery is open, completely disable everything behind it */
+  body.gallery-open #page-content { display: none !important; }
+  #gallery-back { z-index: 100000; }
+  /* Kill draw.io lightbox overlay when gallery is open */
+  body.gallery-open .mxPopupMenu, body.gallery-open div[style*="z-index"] > svg,
+  body.gallery-open > div:not(#page-content):not(#gallery-modal):not(#fullscreen-viewer) {
+    display: none !important;
+  }
+</style>
+</head>
+<body>
+<div id="page-content">
+<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;dark-mode&quot;:&quot;dark&quot;,&quot;toolbar&quot;:&quot;zoom layers tags&quot;,&quot;lightbox&quot;:false,&quot;xml&quot;:&quot;&lt;mxfile host=\&quot;app.diagrams.net\&quot; agent=\&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0\&quot; version=\&quot;29.5.2\&quot;&gt;\n  &lt;diagram name=\&quot;Page-1\&quot; id=\&quot;4YD4_KCUpej_GjHeHBd1\&quot;&gt;\n    &lt;mxGraphModel dx=\&quot;1646\&quot; dy=\&quot;2012\&quot; grid=\&quot;1\&quot; gridSize=\&quot;10\&quot; guides=\&quot;1\&quot; tooltips=\&quot;1\&quot; connect=\&quot;1\&quot; arrows=\&quot;1\&quot; fold=\&quot;1\&quot; page=\&quot;1\&quot; pageScale=\&quot;1\&quot; pageWidth=\&quot;850\&quot; pageHeight=\&quot;1100\&quot; math=\&quot;0\&quot; shadow=\&quot;0\&quot;&gt;\n      &lt;root&gt;\n        &lt;mxCell id=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;1\&quot; parent=\&quot;0\&quot; /&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-1\&quot; parent=\&quot;1\&quot; style=\&quot;whiteSpace=wrap;html=1;aspect=fixed;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;310\&quot; width=\&quot;310\&quot; x=\&quot;190\&quot; y=\&quot;-60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-2\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;xxrao1mpExsfwBc2WbRa-1\&quot; style=\&quot;endArrow=none;dashed=1;html=1;rounded=0;exitX=-0.011;exitY=0.379;exitDx=0;exitDy=0;entryX=0.999;entryY=0.381;entryDx=0;entryDy=0;exitPerimeter=0;entryPerimeter=0;\&quot; target=\&quot;xxrao1mpExsfwBc2WbRa-1\&quot; value=\&quot;\&quot;&gt;\n          &lt;mxGeometry height=\&quot;50\&quot; relative=\&quot;1\&quot; width=\&quot;50\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;220\&quot; y=\&quot;100\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;450\&quot; y=\&quot;100\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-6\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Chateau\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;305\&quot; y=\&quot;-60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-7\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Welcome mini sign\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;305\&quot; y=\&quot;-30\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-9\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; style=\&quot;endArrow=none;html=1;rounded=0;entryX=1;entryY=0;entryDx=0;entryDy=0;\&quot; target=\&quot;xxrao1mpExsfwBc2WbRa-6\&quot; value=\&quot;\&quot;&gt;\n          &lt;mxGeometry height=\&quot;50\&quot; relative=\&quot;1\&quot; width=\&quot;50\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;365\&quot; y=\&quot;60\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;364.52\&quot; y=\&quot;20\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-10\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; style=\&quot;endArrow=none;html=1;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=0;\&quot; target=\&quot;xxrao1mpExsfwBc2WbRa-6\&quot; value=\&quot;\&quot;&gt;\n          &lt;mxGeometry height=\&quot;50\&quot; relative=\&quot;1\&quot; width=\&quot;50\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;305\&quot; y=\&quot;60\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;305\&quot; y=\&quot;20\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-11\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;G\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;453\&quot; y=\&quot;-50\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-12\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;B\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;170\&quot; y=\&quot;-50\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-14\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;xxrao1mpExsfwBc2WbRa-1\&quot; style=\&quot;curved=1;endArrow=classic;html=1;rounded=0;fontStyle=1;exitX=0.009;exitY=0.787;exitDx=0;exitDy=0;exitPerimeter=0;\&quot; value=\&quot;\&quot;&gt;\n          &lt;mxGeometry height=\&quot;50\&quot; relative=\&quot;1\&quot; width=\&quot;50\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;270\&quot; y=\&quot;180\&quot; /&gt;\n              &lt;mxPoint x=\&quot;220\&quot; y=\&quot;130\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;220\&quot; y=\&quot;180\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;310\&quot; y=\&quot;60\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-17\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;&amp;lt;font style=&amp;quot;font-size: 9px;&amp;quot;&amp;gt;Stairs to first floor&amp;lt;/font&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;65\&quot; x=\&quot;305\&quot; y=\&quot;60\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-18\&quot; parent=\&quot;1\&quot; style=\&quot;shape=or;whiteSpace=wrap;html=1;rotation=-90;\&quot; value=\&quot;Entrance\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;80\&quot; width=\&quot;60\&quot; x=\&quot;305\&quot; y=\&quot;180\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-19\&quot; parent=\&quot;1\&quot; style=\&quot;rounded=1;whiteSpace=wrap;html=1;\&quot; value=\&quot;&amp;lt;font style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;TABLE&amp;lt;br&amp;gt;With Fans, Decor/Activities&amp;lt;/font&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;50\&quot; x=\&quot;240\&quot; y=\&quot;210\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-20\&quot; parent=\&quot;1\&quot; style=\&quot;rounded=1;whiteSpace=wrap;html=1;\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;TABLE&amp;lt;/span&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;20\&quot; width=\&quot;30\&quot; x=\&quot;240\&quot; y=\&quot;65\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-22\&quot; parent=\&quot;1\&quot; style=\&quot;rounded=1;whiteSpace=wrap;html=1;rotation=-90;\&quot; value=\&quot;Photo Booth\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;20\&quot; width=\&quot;73.75\&quot; x=\&quot;439.25\&quot; y=\&quot;203.13\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-23\&quot; parent=\&quot;1\&quot; style=\&quot;shape=xor;whiteSpace=wrap;html=1;rotation=90;\&quot; value=\&quot;&amp;lt;font style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;Basket w fans&amp;lt;/font&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;35\&quot; width=\&quot;42\&quot; x=\&quot;409.5\&quot; y=\&quot;211.5\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-25\&quot; parent=\&quot;1\&quot; style=\&quot;shape=or;whiteSpace=wrap;html=1;rotation=-90;\&quot; value=\&quot;Ceremony Main Arch\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;80\&quot; width=\&quot;100\&quot; x=\&quot;620\&quot; y=\&quot;223.13\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-26\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;540\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-27\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;525\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-29\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;575\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-30\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;560\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-31\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;615\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-32\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;600\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-33\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;705\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-34\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;690\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-35\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;745\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-36\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;730\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-37\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;785\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-38\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;770\&quot; y=\&quot;360\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-39\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;540\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-40\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;525\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-41\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;575\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-42\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;560\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-43\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;615\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-44\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;600\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-45\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;705\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-46\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;745\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-47\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;690\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-48\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;785\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-49\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;730\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-50\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Table\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;770\&quot; y=\&quot;400\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-51\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Hills behind\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;640\&quot; y=\&quot;130\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-53\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;545\&quot; y=\&quot;490\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-54\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;585\&quot; y=\&quot;520\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-55\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;700\&quot; y=\&quot;490\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-56\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;740\&quot; y=\&quot;520\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-57\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;775\&quot; y=\&quot;490\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-58\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;545\&quot; y=\&quot;550\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-59\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;Lunch&amp;lt;/span&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;530\&quot; y=\&quot;490\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-60\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;Lunch&amp;lt;/span&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;570\&quot; y=\&quot;510\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-61\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;Lunch&amp;lt;/span&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;530\&quot; y=\&quot;550\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-62\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;Lunch&amp;lt;/span&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;685\&quot; y=\&quot;490\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-63\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;Lunch&amp;lt;/span&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;725\&quot; y=\&quot;520\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-64\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;Lunch&amp;lt;/span&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;760\&quot; y=\&quot;490\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-66\&quot; parent=\&quot;1\&quot; style=\&quot;shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;\&quot; value=\&quot;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;30\&quot; x=\&quot;655\&quot; y=\&quot;550\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-67\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;&amp;lt;span style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;Lunch&amp;lt;/span&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;640\&quot; y=\&quot;550\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-68\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;xxrao1mpExsfwBc2WbRa-69\&quot; style=\&quot;endArrow=none;dashed=1;html=1;rounded=0;\&quot; value=\&quot;\&quot;&gt;\n          &lt;mxGeometry height=\&quot;50\&quot; relative=\&quot;1\&quot; width=\&quot;50\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;520\&quot; y=\&quot;480\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;840\&quot; y=\&quot;480\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-70\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; style=\&quot;endArrow=none;dashed=1;html=1;rounded=0;\&quot; target=\&quot;xxrao1mpExsfwBc2WbRa-69\&quot; value=\&quot;\&quot;&gt;\n          &lt;mxGeometry height=\&quot;50\&quot; relative=\&quot;1\&quot; width=\&quot;50\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;mxPoint x=\&quot;520\&quot; y=\&quot;480\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;840\&quot; y=\&quot;480\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-69\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;After ceremony/vows around 2pm\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;140\&quot; x=\&quot;595\&quot; y=\&quot;460\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-71\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; style=\&quot;shape=filledEdge;curved=0;rounded=0;fixDash=1;endArrow=none;strokeWidth=10;fillColor=#ffffff;edgeStyle=orthogonalEdgeStyle;html=1;\&quot; value=\&quot;\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; relative=\&quot;1\&quot; width=\&quot;60\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;675\&quot; y=\&quot;350\&quot; /&gt;\n              &lt;mxPoint x=\&quot;340\&quot; y=\&quot;350\&quot; /&gt;\n              &lt;mxPoint x=\&quot;340\&quot; y=\&quot;260\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;675\&quot; y=\&quot;320\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;350\&quot; y=\&quot;260\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-72\&quot; parent=\&quot;1\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;\&quot; value=\&quot;Park\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;60\&quot; width=\&quot;120\&quot; y=\&quot;520\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-73\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; style=\&quot;shape=filledEdge;curved=0;rounded=0;fixDash=1;endArrow=none;strokeWidth=10;fillColor=#ffffff;edgeStyle=orthogonalEdgeStyle;html=1;\&quot; value=\&quot;\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; relative=\&quot;1\&quot; width=\&quot;60\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;360\&quot; y=\&quot;555\&quot; /&gt;\n              &lt;mxPoint x=\&quot;360\&quot; y=\&quot;410\&quot; /&gt;\n              &lt;mxPoint x=\&quot;180\&quot; y=\&quot;410\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;120\&quot; y=\&quot;555\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;330\&quot; y=\&quot;360\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-74\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;Walkway\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;60\&quot; x=\&quot;290\&quot; y=\&quot;460\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-75\&quot; parent=\&quot;1\&quot; style=\&quot;rounded=0;whiteSpace=wrap;html=1;\&quot; value=\&quot;Welcome sign colorful disco balls, golden stand&amp;amp;nbsp;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;40\&quot; width=\&quot;110\&quot; x=\&quot;320\&quot; y=\&quot;420\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-80\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;&amp;lt;font style=&amp;quot;font-size: 9px;&amp;quot;&amp;gt;Mehendi area hall 8.30am&amp;lt;br&amp;gt;ground floor&amp;lt;/font&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;55\&quot; x=\&quot;425\&quot; y=\&quot;40\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-81\&quot; parent=\&quot;1\&quot; style=\&quot;text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;\&quot; value=\&quot;DJ/Dance after 3.30pm tables shall be cleared away\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;130\&quot; x=\&quot;720\&quot; y=\&quot;590\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-82\&quot; parent=\&quot;1\&quot; style=\&quot;rounded=1;whiteSpace=wrap;html=1;\&quot; value=\&quot;&amp;lt;font style=&amp;quot;font-size: 6px;&amp;quot;&amp;gt;Props table which have invites printed etc&amp;lt;/font&amp;gt;\&quot; vertex=\&quot;1\&quot;&gt;\n          &lt;mxGeometry height=\&quot;30\&quot; width=\&quot;45\&quot; x=\&quot;260\&quot; y=\&quot;10\&quot; as=\&quot;geometry\&quot; /&gt;\n        &lt;/mxCell&gt;\n        &lt;mxCell id=\&quot;xxrao1mpExsfwBc2WbRa-84\&quot; edge=\&quot;1\&quot; parent=\&quot;1\&quot; source=\&quot;xxrao1mpExsfwBc2WbRa-1\&quot; style=\&quot;curved=1;endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;\&quot; value=\&quot;\&quot;&gt;\n          &lt;mxGeometry height=\&quot;50\&quot; relative=\&quot;1\&quot; width=\&quot;50\&quot; as=\&quot;geometry\&quot;&gt;\n            &lt;Array as=\&quot;points\&quot;&gt;\n              &lt;mxPoint x=\&quot;450\&quot; y=\&quot;170\&quot; /&gt;\n              &lt;mxPoint x=\&quot;400\&quot; y=\&quot;160\&quot; /&gt;\n              &lt;mxPoint x=\&quot;470\&quot; y=\&quot;110\&quot; /&gt;\n              &lt;mxPoint x=\&quot;410\&quot; y=\&quot;80\&quot; /&gt;\n            &lt;/Array&gt;\n            &lt;mxPoint x=\&quot;420\&quot; y=\&quot;160\&quot; as=\&quot;sourcePoint\&quot; /&gt;\n            &lt;mxPoint x=\&quot;370\&quot; y=\&quot;60\&quot; as=\&quot;targetPoint\&quot; /&gt;\n          &lt;/mxGeometry&gt;\n        &lt;/mxCell&gt;\n      &lt;/root&gt;\n    &lt;/mxGraphModel&gt;\n  &lt;/diagram&gt;\n&lt;/mxfile&gt;\n&quot;}"></div>
+<script type="text/javascript" src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
+
+<!-- Notes Section -->
+<div style="max-width:860px; margin:30px auto; padding:20px 28px; background:#12122a; border:1px solid #2a2a44; border-radius:10px; font-family:'Georgia',serif; color:#e0e0e0; line-height:1.7;">
+  <h2 style="color:#f5c518; margin-top:0; font-size:22px;">Venue Notes</h2>
+  <ul style="padding-left:20px;">
+    <li><strong>Chateau has two floors &mdash; Ground and First.</strong> Ground floor has some rooms, Mehendi main hall, and <a href="javascript:void(0)" onclick="openGallery('tables')" style="color:#f5c518; text-decoration:underline; cursor:pointer;">tables</a> for games &amp; activities for guests. The <a href="javascript:void(0)" onclick="openGallery('welcome-sign')" style="color:#f5c518; text-decoration:underline; cursor:pointer;">outside welcome sign</a> (colorful disco balls, golden stand) is by the walkway entrance.</li>
+    <li><strong>First floor</strong> has bridal and groom suites, an <a href="javascript:void(0)" onclick="openGallery('welcome-sign-mini')" style="color:#f5c518; text-decoration:underline; cursor:pointer;">inside welcome sign</a> (taken care of by Sabrina), plus a table with printed invites, props &amp; mementos from close personal friends &mdash; decorated.</li>
+  </ul>
+
+  <h2 style="color:#f5c518; font-size:22px;">Schedule</h2>
+  <ul style="padding-left:20px;">
+    <li><strong>8:30 &ndash; 10:00 AM</strong> &mdash; <a href="javascript:void(0)" onclick="openGallery('mehendi')" style="color:#f5c518; text-decoration:underline; cursor:pointer;">Mehendi</a></li>
+    <li><strong>10:00 AM &ndash; 12:30/1:00 PM</strong> &mdash; Makeup</li>
+    <li><strong>12:30 &ndash; 1:30 PM</strong> &mdash; <a href="javascript:void(0)" onclick="openGallery('ceremony-arch')" style="color:#f5c518; text-decoration:underline; cursor:pointer;">Ceremony Main</a> (vows, <em>varmala</em>, rings). Guests play games like shoe game. Chairs/seating facing the couple.</li>
+    <li><strong>1:30 &ndash; 3:30 PM</strong> &mdash; Lunch. Rearrange seating to be lunch-friendly / scattered.</li>
+    <li><strong>4:00 PM onwards</strong> &mdash; DJ / Sangeet. Shove away seating to make space for dance.</li>
+  </ul>
+</div>
+</div><!-- end #page-content -->
+
+<!-- Gallery Modal &mdash; OUTSIDE page-content so draw.io cannot intercept clicks -->
+<div id="gallery-modal">
+  <button id="gallery-close" onclick="closeGallery()">&times;</button>
+  <button id="gallery-back" onclick="closeGallery()" style="position:fixed; top:16px; left:24px; z-index:100000; background:rgba(30,30,30,0.8); color:#fff; border:none; border-radius:24px; padding:8px 18px; font-size:15px; cursor:pointer; font-family:'Georgia',serif; letter-spacing:0.5px;" onmouseover="this.style.background='rgba(245,197,24,0.3)'" onmouseout="this.style.background='rgba(30,30,30,0.8)'">&#8592; Back to Map</button>
+  <div id="gallery-content">
+    <div id="gallery-title"></div>
+    <div id="gallery-images"></div>
+    <div id="gallery-empty" style="display:none;">No images uploaded yet. Add images to this folder and update the list below.</div>
+  </div>
+</div>
+
+<!-- Fullscreen Image Viewer &mdash; OUTSIDE page-content -->
+<div id="fullscreen-viewer">
+  <button onclick="closeFullscreen()" style="position:fixed; top:16px; right:24px; z-index:100002; color:#fff; font-size:36px; cursor:pointer; background:rgba(30,30,30,0.8); border:none; border-radius:50%; width:48px; height:48px; display:flex; align-items:center; justify-content:center;" onmouseover="this.style.background='rgba(245,197,24,0.3)'" onmouseout="this.style.background='rgba(30,30,30,0.8)'">&times;</button>
+  <button onclick="closeFullscreen()" style="position:fixed; top:16px; left:24px; z-index:100002; background:rgba(30,30,30,0.8); color:#fff; border:none; border-radius:24px; padding:8px 18px; font-size:15px; cursor:pointer; font-family:'Georgia',serif;" onmouseover="this.style.background='rgba(245,197,24,0.3)'" onmouseout="this.style.background='rgba(30,30,30,0.8)'">&#8592; Back</button>
+  <img id="fullscreen-img" src="" alt="Full view" onclick="event.stopPropagation()" />
+</div>
+
+<script>
+  const galleryConfig = {
+    'tables': {
+      title: '\ud83e\ude91 Table Decor',
+      folder: '../wedding-decor/',
+      images: ['wedding-decor-seating-matching-colorful-idea.jpeg']
+    },
+    'ceremony-arch': {
+      title: '\ud83d\udc90 Ceremony Arch',
+      folder: '../wedding-decor/',
+      images: ['wedding-decor-ceremony-main-arch-matching-colorful-outside.jpeg']
+    },
+    'entrance': {
+      title: '\ud83d\udea3 Entrance Decor',
+      folder: '../wedding-decor/',
+      images: []
+    },
+    'photo-booth': {
+      title: '\ud83d\udcf8 Photo Booth',
+      folder: '../wedding-decor/',
+      images: []
+    },
+    'welcome-sign': {
+      title: '\u2728 Welcome Sign (Outside)',
+      folder: '../wedding-decor/',
+      images: ['wedding-decor-welcome-sign-colorful-outside-idea.jpeg']
+    },
+    'welcome-sign-mini': {
+      title: '\u2728 Mini Welcome Sign (Inside)',
+      folder: '../wedding-decor/',
+      images: ['wedding-decor-welcome-sign-mini-inside-idea-sabrina-will-give.jpeg']
+    },
+    'mehendi': {
+      title: '\ud83c\udf3f Mehendi',
+      folder: '../mehendi/',
+      images: ['mehendi-decor-henna-white-floral-inside.jpeg']
+    },
+    'sangeet': {
+      title: '\ud83c\udfb6 Sangeet',
+      folder: '../sangeet/',
+      images: []
+    }
+  };
+
+  const labelToKey = {
+    'ceremony main arch': 'ceremony-arch',
+    'entrance': 'entrance',
+    'photo booth': 'photo-booth',
+    'welcome sign': 'welcome-sign',
+    'welcome sign colorful disco balls, golden stand': 'welcome-sign',
+    'welcome mini sign': 'welcome-sign-mini',
+    'mehendi': 'mehendi',
+    'sangeet': 'sangeet'
+  };
+
+  function openGallery(key) {
+    var config = galleryConfig[key];
+    if (!config) return;
+    var modal = document.getElementById('gallery-modal');
+    var title = document.getElementById('gallery-title');
+    var imagesDiv = document.getElementById('gallery-images');
+    var emptyMsg = document.getElementById('gallery-empty');
+
+    title.textContent = config.title;
+    imagesDiv.innerHTML = '';
+
+    if (config.images.length === 0) {
+      emptyMsg.style.display = 'block';
+    } else {
+      emptyMsg.style.display = 'none';
+      config.images.forEach(function(img) {
+        var imgEl = document.createElement('img');
+        imgEl.src = config.folder + img;
+        imgEl.alt = img;
+        imgEl.onclick = function() {
+          document.getElementById('fullscreen-img').src = imgEl.src;
+          document.getElementById('fullscreen-viewer').style.display = 'flex';
+        };
+        imagesDiv.appendChild(imgEl);
+      });
+    }
+    document.body.classList.add('gallery-open');
+    modal.style.display = 'flex';
+  }
+
+  function closeGallery() {
+    document.getElementById('fullscreen-viewer').style.display = 'none';
+    document.getElementById('gallery-modal').style.display = 'none';
+    document.body.classList.remove('gallery-open');
+  }
+
+  function closeFullscreen() {
+    document.getElementById('fullscreen-viewer').style.display = 'none';
+  }
+
+  // Fullscreen viewer: click background to close
+  document.getElementById('fullscreen-viewer').addEventListener('click', function(e) {
+    if (e.target !== document.getElementById('fullscreen-img')) {
+      closeFullscreen();
+    }
+  });
+
+  // Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (document.getElementById('fullscreen-viewer').style.display === 'flex') {
+        closeFullscreen();
+      } else {
+        closeGallery();
+      }
+    }
+  });
+
+  // Intercept clicks on the drawio diagram SVG elements
+  document.addEventListener('click', function(e) {
+    // Don't intercept clicks when gallery or fullscreen is open
+    if (document.body.classList.contains('gallery-open')) return;
+    // Only intercept clicks inside the page-content / draw.io area
+    if (!e.target.closest('#page-content')) return;
+    // Don't intercept clicks on our own gallery links
+    if (e.target.closest('a[onclick]')) return;
+    // Skip clicks on the notes section below the diagram
+    if (e.target.closest('div[style*="max-width:860px"]')) return;
+    // Check if this click is on the draw.io diagram SVG (not the notes section)
+    var inDiagram = e.target.closest('.mxgraph') || e.target.closest('svg') || e.target.tagName === 'svg';
+    var el = e.target;
+    for (var i = 0; i < 8 && el; i++) {
+      if (el.id === 'page-content') break;
+      var text = (el.textContent || '').trim().toLowerCase();
+      // Only match text under 80 chars (diagram labels, not entire sections)
+      if (text.length > 0 && text.length < 80) {
+        for (var label in labelToKey) {
+          if (text === label || text.indexOf(label) >= 0) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            openGallery(labelToKey[label]);
+            return;
+          }
+        }
+      }
+      el = el.parentElement;
+    }
+    // For any click on the diagram SVG, block draw.io's lightbox from opening
+    if (inDiagram) {
+      e.stopImmediatePropagation();
+    }
+  }, true);
+
+  // Kill any draw.io lightbox overlays that sneak through
+  new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      m.addedNodes.forEach(function(node) {
+        if (node.nodeType !== 1) return;
+        // draw.io lightbox creates a direct child of <body> with high z-index
+        if (node.parentElement === document.body &&
+            node.id !== 'page-content' && node.id !== 'gallery-modal' && node.id !== 'fullscreen-viewer' &&
+            node.tagName === 'DIV' && !node.classList.contains('mxgraph')) {
+          var s = node.style;
+          if (s.position === 'fixed' || s.position === 'absolute' || parseInt(s.zIndex) > 0) {
+            node.remove();
+          }
+        }
+      });
+    });
+  }).observe(document.body, { childList: true });
+</script>
+</body>
+</html>
