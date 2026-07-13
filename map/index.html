@@ -60,16 +60,19 @@
     display: none !important;
   }
   /* Event Planner Accordion */
-  .event-section { margin-bottom: 8px; border: 1px solid #2a2a44; border-radius: 8px; overflow: hidden; }
+  .event-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .event-section { border: 1px solid #2a2a44; border-radius: 8px; overflow: hidden; }
+  .event-section.full-width { grid-column: 1 / -1; }
   .event-header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 14px 18px; background: #1e1e3a; cursor: pointer;
-    font-size: 17px; font-weight: bold; color: #f5c518;
+    font-size: 16px; font-weight: bold; color: #f5c518;
     transition: background 0.2s;
   }
   .event-header:hover { background: #2a2a50; }
   .event-header .arrow { font-size: 12px; transition: transform 0.2s; }
   .event-header.open .arrow { transform: rotate(90deg); }
+  .event-time { font-size: 12px; color: #aaa; font-weight: normal; margin-left: 8px; }
   .event-body { display: none; padding: 10px 18px 16px; background: #14142e; }
   .event-body.open { display: block; }
   .event-body ul { padding-left: 18px; margin: 6px 0; }
@@ -80,13 +83,14 @@
   .detail-link:hover { color: #b3e0ff; }
 
   /* Mobile responsive */
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
+    .event-grid { grid-template-columns: 1fr; }
     #gallery-content { width: 95%; margin: 20px auto; padding: 10px; }
     #gallery-title { font-size: 20px; margin-bottom: 16px; }
     #gallery-images { grid-template-columns: 1fr; gap: 12px; }
     #gallery-close { top: 10px; right: 12px; width: 40px; height: 40px; font-size: 28px; }
     #fullscreen-viewer img { max-width: 100%; max-height: 90%; border-radius: 0; }
-    .event-header { padding: 12px 14px; font-size: 15px; }
+    .event-header { padding: 12px 14px; font-size: 14px; }
     .event-body { padding: 8px 12px 14px; }
     .event-body ul { padding-left: 14px; }
     .event-body li { font-size: 14px; margin-bottom: 8px; }
@@ -107,10 +111,11 @@
   <h2 style="color:#f5c518; margin-top:0; font-size:22px;">&#128141; Wedding Day Planner</h2>
   <p style="color:#aaa; margin-bottom:18px; font-size:14px;">Click any section to expand details. Click items with &#128247; to see decor images.</p>
 
+  <div class="event-grid">
   <!-- MEHENDI -->
   <div class="event-section">
     <div class="event-header" onclick="toggleSection(this)">
-      <span>&#127807; Mehendi</span><span class="arrow">&#9654;</span>
+      <span>&#127807; Mehendi<span class="event-time">8:30 &ndash; 10:00 AM</span></span><span class="arrow">&#9654;</span>
     </div>
     <div class="event-body">
       <ul>
@@ -124,7 +129,7 @@
   <!-- MAIN CEREMONY -->
   <div class="event-section">
     <div class="event-header" onclick="toggleSection(this)">
-      <span>&#128144; Main Ceremony</span><span class="arrow">&#9654;</span>
+      <span>&#128144; Main Ceremony<span class="event-time">12:30 &ndash; 1:30 PM</span></span><span class="arrow">&#9654;</span>
     </div>
     <div class="event-body">
       <h4 style="color:#f5c518; margin:8px 0 4px;">Outside Decor</h4>
@@ -146,23 +151,24 @@
   <!-- LUNCH -->
   <div class="event-section">
     <div class="event-header" onclick="toggleSection(this)">
-      <span>&#127869; Lunch</span><span class="arrow">&#9654;</span>
+      <span>&#127869; Lunch<span class="event-time">1:30 &ndash; 3:30 PM</span></span><span class="arrow">&#9654;</span>
     </div>
     <div class="event-body">
-      <p><strong>1:30 &ndash; 3:30 PM</strong> &mdash; Rearrange seating to lunch-friendly / scattered layout.</p>
+      <p>Rearrange seating to lunch-friendly / scattered layout.</p>
     </div>
   </div>
 
   <!-- SANGEET & DJ -->
   <div class="event-section">
     <div class="event-header" onclick="toggleSection(this)">
-      <span>&#127926; Sangeet &amp; DJ</span><span class="arrow">&#9654;</span>
+      <span>&#127926; Sangeet &amp; DJ<span class="event-time">4:00 PM onwards</span></span><span class="arrow">&#9654;</span>
     </div>
     <div class="event-body">
-      <p><strong>4:00 PM onwards</strong> &mdash; Songs/sequence TBD. Shove seating to make dance space.</p>
+      <p>Songs/sequence TBD. Shove seating to make dance space.</p>
       <p style="color:#888; font-style:italic;">Placeholder &mdash; will add song list &amp; sequence later.</p>
     </div>
   </div>
+  </div><!-- end event-grid -->
 </div>
 
 <!-- Detail Overlay (for text lists like games) -->
@@ -384,10 +390,10 @@
     'mehendi-games': {
       title: '\ud83c\udfb2 Mehendi Games & Activities',
       content: '<ul>' +
-        '<li><strong>Pick things up based on song lyrics</strong> (free)</li>' +
-        '<li><strong>KwK Guess movie based on description</strong> (free)</li>' +
-        '<li><strong>Hindi guess based on English translate</strong> (free)</li>' +
-        '<li><strong>Who knows the bride the best</strong> (can be free or print)</li>' +
+        '<li><strong>Pick things up based on song lyrics</strong></li>' +
+        '<li><strong>KwK Guess movie based on description</strong></li>' +
+        '<li><strong>Hindi guess based on English translate</strong></li>' +
+        '<li><strong>Who knows the bride the best</strong></li>' +
         '<li><strong>Wedding themed word strands</strong> (cards)</li>' +
         '<li><strong>Balls &amp; buckets</strong> &mdash; girls throw ball facing back, partner catches in bucket (if time permits, maybe returnable items)</li>' +
       '</ul>'
